@@ -1,0 +1,24 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6rem;
+}
+
+.logo {
+  width: 300;
+  height: 50;
+  display: block;
+}
+.mobilelogo {
+  display: none;
+}
+@media only screen and (max-width: 600px) and (min-width: 400px) {
+  .mobilelogo {
+    display: block;
+  }
+  .logo {
+    display: none;
+  }
+}
