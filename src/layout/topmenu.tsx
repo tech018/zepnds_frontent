@@ -4,6 +4,7 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Dialog } from "@headlessui/react";
 import { Switch } from "@helpers/router";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const navigation = [
   { name: "Product", href: "#" },
@@ -124,12 +125,12 @@ const Topmenu = () => {
                   ))}
                 </div>
                 <div className="py-6">
-                  <a
-                    href="#"
+                  <Link
                     className="-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-6 text-gray-900 hover:bg-gray-400/10"
+                    href="/"
                   >
                     Log in
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

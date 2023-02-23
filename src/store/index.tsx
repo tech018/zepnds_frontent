@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
-import { backendApi } from "./api.slice";
+import { backendApi } from "@store/api.slice";
+import userReducer from "@store/user.slice";
 
 export const makeStore = ({ ...props }) =>
   configureStore({
     reducer: {
+      user: userReducer,
       [backendApi.reducerPath]: backendApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>

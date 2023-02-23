@@ -1,14 +1,48 @@
-import { useState } from "react";
-import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import React, { useEffect } from "react";
+import { NextPage } from "next";
 import { Switch } from "@helpers/router";
 import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { updateUser, usePostOnboardingMutation } from "@store/user.slice";
+import { useDispatch } from "react-redux";
 
-function classNames(...classes: any) {
-  return classes.filter(Boolean).join(" ");
+export interface LoginValues {
+  email: string;
+  password: string;
 }
 
-export default function Login() {
+const schema = yup.object().shape({
+  email: yup.string().email().required(),
+  password: yup.string().min(8).max(32).required(),
+});
+
+const Login: NextPage = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<LoginValues>({ resolver: yupResolver(schema) });
+  const dispatch = useDispatch();
+  const loginHandler = (data: LoginValues) => {
+    reqOnBoarding(data);
+  };
+
+  const onSubmit = handleSubmit((data) => loginHandler(data));
+
+  const [reqOnBoarding, resOnBoarding] = usePostOnboardingMutation();
   const router = useRouter();
+  useEffect(() => {
+    if (resOnBoarding.isSuccess) {
+      const data = resOnBoarding.data.token;
+      dispatch(updateUser(data));
+      localStorage.setItem("token", data);
+      router.replace("/dashboard");
+    }
+  }, [resOnBoarding, router, dispatch]);
+
   return (
     <div className="isolate bg-white py-24 px-6 sm:py-32 lg:px-8 ">
       <div className="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]">
@@ -38,14 +72,13 @@ export default function Login() {
       </div>
 
       <form
-        action="#"
-        method="POST"
+        onSubmit={onSubmit}
         className="mx-auto mt-16 max-w-xl sm:mt-20 shadow-2xl  py-10 px-10 "
       >
         <div className="grid grid-cols-1 gap-y-6 gap-x-8 sm:grid-cols-2">
           <div className="sm:col-span-2">
             <label
-              htmlFor="company"
+              htmlFor="email"
               className="block text-sm font-semibold leading-6 text-gray-900"
             >
               Email
@@ -53,11 +86,14 @@ export default function Login() {
             <div className="mt-2.5">
               <input
                 type="text"
-                name="company"
-                id="company"
-                autoComplete="organization"
+                {...register("email")}
                 className="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
               />
+              {errors.email && (
+                <span className="text-red-800 font-medium mt-2">
+                  {errors.email.message?.toLocaleUpperCase()}
+                </span>
+              )}
             </div>
           </div>
           <div className="sm:col-span-2">
@@ -70,11 +106,14 @@ export default function Login() {
             <div className="mt-2.5">
               <input
                 type="password"
-                name="email"
-                id="email"
-                autoComplete="email"
+                {...register("password")}
                 className="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
               />
+              {errors.password && (
+                <span className="text-red-800 font-medium mt-2">
+                  {errors.password.message?.toLocaleUpperCase()}
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -97,4 +136,6 @@ export default function Login() {
       </div>
     </div>
   );
-}
+};
+
+export default Login;
