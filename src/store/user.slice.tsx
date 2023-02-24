@@ -23,7 +23,7 @@ interface Args {
 }
 
 export const onboardingApiSlice = backendApi.injectEndpoints({
-  endpoints: (builder: any) => ({
+  endpoints: (builder) => ({
     PostOnboarding: builder.mutation({
       query: (args: Args) => ({
         url: "/api/users",

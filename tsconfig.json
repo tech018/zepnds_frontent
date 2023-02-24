@@ -20,9 +20,11 @@
       "@components/*": ["src/components/*"],
       "@constants/*": ["src/constants/*"],
       "@pages/*": ["src/pages/*"],
-      "@layout/*": ["src/layout/*"],
+      "@layout/*": ["src/components/layout/*"],
       "@helpers/*": ["src/helpers/*"],
-      "@store/*": ["src/store/*"]
+      "@store/*": ["src/store/*"],
+      "@modules/*": ["src/modules/*"],
+      "@seo/*": ["src/seo/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

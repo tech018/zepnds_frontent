@@ -1,6 +1,6 @@
 import React from "react";
 
-const About = () => {
+const HeroSection = () => {
   return (
     <main>
       <div className="relative px-6 lg:px-8">
@@ -68,4 +68,4 @@ const About = () => {
   );
 };
 
-export default About;
+export default HeroSection;
